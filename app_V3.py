@@ -146,11 +146,11 @@ with st.sidebar:
         st.markdown(f"<div class='info-box {css_p}'>{msg_p}</div>", unsafe_allow_html=True)
 
     # Slider immer sichtbar, Preset setzt Startwert
-    wd = st.slider("Defektrate",                    1, 10, dwd, key="swd")
-    wl = st.slider("Gesamtlieferzeit",              1, 10, dwl, key="swl")
-    wc = st.slider("Gesamtkosten",                  1, 10, dwc, key="swc")
-    wi = st.slider("Inspektionsergebnis",           1, 10, dwi, key="swi")
-    wr = st.slider("Umsatz (invers: hoch = besser)",1, 10, dwr, key="swr")
+    wd = st.slider("Defektrate",                    1, 10, dwd, key=f"swd_{preset}")
+    wl = st.slider("Gesamtlieferzeit",              1, 10, dwl, key=f"swl_{preset}")
+    wc = st.slider("Gesamtkosten",                  1, 10, dwc, key=f"swc_{preset}")
+    wi = st.slider("Inspektionsergebnis",           1, 10, dwi, key=f"swi_{preset}")
+    wr = st.slider("Umsatz (invers: hoch = besser)",1, 10, dwr, key=f"swr_{preset}")
 
     tw = wd+wl+wc+wi+wr
     st.markdown(f"""<div class='info-box' style='font-size:0.78rem'>
@@ -200,7 +200,7 @@ sup_order   = sorted(scored["Supplier name"].unique())
 #  HEADER
 # ════════════════════════════════════════════════════════════════
 st.markdown(f"""
-<h1 style='font-size:1.9rem;font-weight:700;color:#e8eaf0;margin-bottom:2px'>RiskRadar</h1>
+<h1 style='font-size:1.9rem;font-weight:700;color:#e8eaf0;margin-bottom:2px'>🛡️ RiskRadar</h1>
 <p style='color:#5577aa;font-size:0.88rem;margin-top:0'>
 Supplier & Procurement Risk Intelligence · THI Ingolstadt DPDS 2026 · Gruppe 9
 &nbsp;·&nbsp; Profil: <b style='color:#c8d4f0'>{preset}</b>
@@ -258,19 +258,19 @@ with tab0:
     fc1,fc2,fc3 = st.columns(3)
     with fc1:
         st.markdown("""<div class='feature-card'>
-        <div class='feature-title'>Welche Lieferanten sind kritisch?</div>
+        <div style='font-size:2rem;margin-bottom:8px'>🚦</div><div class='feature-title'>Welche Lieferanten sind kritisch?</div>
         <div class='feature-desc'>Die Ampel zeigt sofort den Status jedes Lieferanten. Kritische SKUs werden direkt aufgelistet mit konkreten Handlungsempfehlungen.</div>
         </div>""", unsafe_allow_html=True)
         st.markdown("<p style='text-align:center;margin-top:4px'><i style='color:#5577aa;font-size:0.8rem'>Tab: Dashboard</i></p>", unsafe_allow_html=True)
     with fc2:
         st.markdown("""<div class='feature-card'>
-        <div class='feature-title'>Was für Produkte kaufen wir ein?</div>
+        <div style='font-size:2rem;margin-bottom:8px'>🏷️</div><div class='feature-title'>Was für Produkte kaufen wir ein?</div>
         <div class='feature-desc'>Produkte werden in 3 Segmente klassifiziert: Premium, Standard und Budget – basierend auf Preis, Umsatz und Defektrate.</div>
         </div>""", unsafe_allow_html=True)
         st.markdown("<p style='text-align:center;margin-top:4px'><i style='color:#5577aa;font-size:0.8rem'>Tab: Produkte</i></p>", unsafe_allow_html=True)
     with fc3:
         st.markdown("""<div class='feature-card'>
-        <div class='feature-title'>Wie hoch ist unser Risiko?</div>
+        <div style='font-size:2rem;margin-bottom:8px'>📊</div><div class='feature-title'>Wie hoch ist unser Risiko?</div>
         <div class='feature-desc'>Der Risk Score (0–100) bewertet jeden Lieferanten nach 5 KPIs: Defektrate, Lieferzeit, Kosten, Inspektion und Umsatz.</div>
         </div>""", unsafe_allow_html=True)
         st.markdown("<p style='text-align:center;margin-top:4px'><i style='color:#5577aa;font-size:0.8rem'>Tab: Risk Overview</i></p>", unsafe_allow_html=True)
@@ -340,6 +340,21 @@ Risk Score (0–100) = gewichtete Summe aus 5 normierten KPIs<br><br>
 &nbsp;&nbsp;Umsatz (invers) &nbsp;&nbsp;× {wr/tw_display*100:.0f}%  → hoch = BESSER (senkt den Score)<br><br>
 Normierung: Jeder KPI wird per Min-Max auf 0–1 skaliert, dann gewichtet addiert × 100.<br>
 Grenzwerte: Hoch ≥ {thresh_high} · Mittel ≥ {thresh_low} · Niedrig &lt; {thresh_low}
+    </div>""", unsafe_allow_html=True)
+
+    st.markdown("""<div class='info-box' style='border-left-color:#a855f7;margin-top:8px'>
+    <b>Beispielrechnung mit SKU1 (Manuell-Profil, Gewichte 4/3/2/5/2):</b><br><br>
+    Rohdaten: Defektrate = 4.85% · Lieferzeit = 25 Tage · Kosten = €503 · Inspektion = Pending · Umsatz = €7.461<br><br>
+    Schritt 1 – Normierung (Min-Max):<br>
+    &nbsp;&nbsp;Defektrate: (4.85 − 0.02) / (4.94 − 0.02) = <b>0.98</b><br>
+    &nbsp;&nbsp;Lieferzeit: (25 − 4) / (37 − 4) = <b>0.64</b><br>
+    &nbsp;&nbsp;Kosten: (503 − 104) / (997 − 104) = <b>0.45</b><br>
+    &nbsp;&nbsp;Inspektion: Pending = <b>0.50</b> (fix kodiert)<br>
+    &nbsp;&nbsp;Umsatz (invers): 1 − (7461 − 1062) / (9866 − 1062) = <b>0.27</b><br><br>
+    Schritt 2 – Gewichtete Summe:<br>
+    &nbsp;&nbsp;(4×0.98 + 3×0.64 + 2×0.45 + 5×0.50 + 2×0.27) / 16 × 100<br>
+    &nbsp;&nbsp;= (3.92 + 1.92 + 0.90 + 2.50 + 0.54) / 16 × 100<br>
+    &nbsp;&nbsp;= 9.78 / 16 × 100 = <b>Risk Score: 61.1 → Hoch</b>
     </div>""", unsafe_allow_html=True)
 
     st.markdown("""<div class='info-box' style='border-left-color:#a855f7'>
@@ -693,6 +708,51 @@ with tab5:
     plt.colorbar(im,ax=ax_sp,shrink=0.8); plt.tight_layout(); st.pyplot(fig_sp); plt.close()
 
     st.markdown(f"<div class='info-box'>Stärkster Zusammenhang: <b>{kpi_labels[max_idx[0]]}</b> ↔ <b>{kpi_labels[max_idx[1]]}</b> (ρ = {sp_matrix[max_idx]:.2f}). Alle Werte unter 0.3 – kein Multikollinearitätsproblem für das Scoring-Modell.</div>", unsafe_allow_html=True)
+
+    st.markdown("---")
+    st.markdown("<div class='section-header'>Streudiagramm – Achsen frei wählbar</div>", unsafe_allow_html=True)
+
+    scatter_cols_full = ["Defect rates","Gesamtlieferzeit","Costs","Revenue generated","Risk Score","Price","Availability","Manufacturing costs","Shipping costs"]
+    scatter_labels    = ["Defektrate (%)","Lieferzeit (Tage)","Kosten (€)","Umsatz (€)","Risk Score","Preis (€)","Verfügbarkeit (%)","Mfg. Kosten (€)","Versandkosten (€)"]
+    col_map = dict(zip(scatter_labels, scatter_cols_full))
+
+    sc1, sc2, sc3 = st.columns(3)
+    with sc1: x_label = st.selectbox("X-Achse:", scatter_labels, index=0, key="sc_x")
+    with sc2: y_label = st.selectbox("Y-Achse:", scatter_labels, index=3, key="sc_y")
+    with sc3: color_by_sc = st.selectbox("Einfärben nach:", ["Lieferant","Produktkategorie","Risikostufe"], key="sc_col")
+
+    x_col = col_map[x_label]
+    y_col = col_map[y_label]
+
+    if color_by_sc == "Lieferant":
+        sc_colors = [SUP_COLORS.get(s,"#aaa") for s in scored_full["Supplier name"]]
+        legend_patches = [mpatches.Patch(color=SUP_COLORS.get(s,"#aaa"), label=s) for s in sorted(scored_full["Supplier name"].unique())]
+    elif color_by_sc == "Produktkategorie":
+        sc_colors = [PROD_COLORS.get(p,"#aaa") for p in scored_full["Product type"]]
+        legend_patches = [mpatches.Patch(color=PROD_COLORS.get(p,"#aaa"), label=p) for p in sorted(scored_full["Product type"].unique())]
+    else:
+        sc_colors = [RISK_COLORS.get(r,"#aaa") for r in scored_full["Risikostufe"]]
+        legend_patches = [mpatches.Patch(color=v, label=k) for k,v in RISK_COLORS.items()]
+
+    plot_df = scored_full[[x_col, y_col, "Supplier name"]].dropna()
+
+    fig_sc2, ax_sc2 = plt.subplots(figsize=(10, 5))
+    colors_plot = [sc_colors[i] for i in scored_full.index if i in plot_df.index]
+    ax_sc2.scatter(plot_df[x_col], plot_df[y_col],
+                   c=[sc_colors[i] for i in plot_df.index],
+                   s=70, alpha=0.85, edgecolors="#0f1117", linewidths=0.8, zorder=3)
+    ax_sc2.set_xlabel(x_label); ax_sc2.set_ylabel(y_label)
+    ax_sc2.grid(zorder=0)
+    ax_sc2.legend(handles=legend_patches, fontsize=9, framealpha=0.2)
+
+    # Korrelation der gewählten Achsen anzeigen
+    if x_col in kpi_cols and y_col in kpi_cols:
+        xi = kpi_cols.index(x_col); yi = kpi_cols.index(y_col)
+        rho = sp_matrix[xi, yi]
+        ax_sc2.set_title(f"Spearman ρ = {rho:.2f}", fontsize=10, color="#c8d4f0")
+
+    plt.tight_layout(); st.pyplot(fig_sc2); plt.close()
+    st.markdown("<div class='info-box'>Ideal für Zusammenhangsanalyse: Wähle zwei KPIs und sieh ob ein Muster erkennbar ist. Der Spearman-Wert oben zeigt die Stärke des Zusammenhangs.</div>", unsafe_allow_html=True)
 
 # ════════════════════════════════════════════════════════════════
 #  TAB 6 – ALLE DATEN
