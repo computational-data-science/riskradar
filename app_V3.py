@@ -542,7 +542,7 @@ with tab2:
         with col_w:
             box_data = [scored[scored["Supplier name"]==s][kpi].dropna().values for s in sup_order]
             fig_b,ax_b = plt.subplots(figsize=(7,4))
-            bp = ax_b.boxplot(box_data,labels=sup_order,patch_artist=True,
+            bp = ax_b.boxplot(box_data,tick_labels=sup_order,patch_artist=True,
                               medianprops={"color":"#e8eaf0","linewidth":2},
                               whiskerprops={"color":"#8899bb"},capprops={"color":"#8899bb"},
                               flierprops={"marker":"o","markerfacecolor":"#ef4444","markersize":5,"alpha":0.7})
