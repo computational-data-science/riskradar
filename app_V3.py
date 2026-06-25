@@ -88,6 +88,57 @@ section[data-testid="stSidebar"] *{color:#c8cfe0 !important;}
     opacity: 1 !important;
 }
 
+/* Sidebar: Expander und Auswahlfelder dunkel machen */
+section[data-testid="stSidebar"] [data-testid="stExpander"] {
+    background-color: #111827 !important;
+    border: 1px solid #252d3d !important;
+    border-radius: 10px !important;
+}
+
+/* Expander-Kopf, z.B. "Lieferanten & Produkte" */
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary,
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary p,
+section[data-testid="stSidebar"] [data-testid="stExpander"] summary span {
+    background-color: #1a2035 !important;
+    color: #f8fafc !important;
+}
+
+/* Multiselect-/Select-Feld: Hintergrund dunkel */
+section[data-testid="stSidebar"] [data-baseweb="select"] > div {
+    background-color: #1a2035 !important;
+    border-color: #334155 !important;
+    color: #f8fafc !important;
+}
+
+/* Text im Select-Feld */
+section[data-testid="stSidebar"] [data-baseweb="select"] span,
+section[data-testid="stSidebar"] [data-baseweb="select"] input,
+section[data-testid="stSidebar"] [data-baseweb="select"] div {
+    color: #f8fafc !important;
+}
+
+/* Placeholder / ausgegrauter Text */
+section[data-testid="stSidebar"] [data-baseweb="select"] input::placeholder {
+    color: #cbd5e1 !important;
+    opacity: 1 !important;
+}
+
+/* Kleine x- und Pfeil-Icons */
+section[data-testid="stSidebar"] [data-baseweb="select"] svg {
+    fill: #cbd5e1 !important;
+    color: #cbd5e1 !important;
+}
+
+/* Ausgewählte Tags, z.B. Supplier 1 */
+section[data-testid="stSidebar"] [data-baseweb="tag"] {
+    background-color: #ef4444 !important;
+    color: #ffffff !important;
+}
+
+section[data-testid="stSidebar"] [data-baseweb="tag"] span {
+    color: #ffffff !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
