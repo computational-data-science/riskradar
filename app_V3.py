@@ -43,6 +43,30 @@ section[data-testid="stSidebar"] *{color:#c8cfe0 !important;}
 .glossar-card{background:linear-gradient(135deg,#1a2035,#1e2640);border:1px solid #2a3350;border-radius:12px;padding:14px 18px;margin:6px 0;}
 .glossar-term{font-size:0.95rem;font-weight:600;color:#60a5fa;margin-bottom:4px;}
 .glossar-def{font-size:0.82rem;color:#8899bb;line-height:1.5;}
+
+/* KPI-Zeile oben: heller machen */
+[data-testid="metric-container"] label,
+[data-testid="stMetricLabel"],
+[data-testid="stMetricLabel"] p {
+    color: #e2e8f0 !important;
+    opacity: 1 !important;
+}
+
+[data-testid="metric-container"] [data-testid="stMetricValue"],
+[data-testid="stMetricValue"],
+[data-testid="stMetricValue"] div,
+[data-testid="stMetricValue"] p {
+    color: #f8fafc !important;
+    opacity: 1 !important;
+    font-weight: 700 !important;
+}
+
+[data-testid="metric-container"] [data-testid="stMetricDelta"],
+[data-testid="stMetricDelta"],
+[data-testid="stMetricDelta"] div {
+    opacity: 1 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
