@@ -67,6 +67,27 @@ section[data-testid="stSidebar"] *{color:#c8cfe0 !important;}
     opacity: 1 !important;
 }
 
+/* Markdown-Überschriften heller machen */
+[data-testid="stMarkdownContainer"] h1,
+[data-testid="stMarkdownContainer"] h2,
+[data-testid="stMarkdownContainer"] h3,
+[data-testid="stMarkdownContainer"] h4 {
+    color: #f8fafc !important;
+    opacity: 1 !important;
+}
+
+/* normaler Markdown-Text etwas heller */
+[data-testid="stMarkdownContainer"] p {
+    color: #dbe4f0 !important;
+    opacity: 1 !important;
+}
+
+/* kursive Hinweise wie "Tab: Dashboard" */
+[data-testid="stMarkdownContainer"] i {
+    color: #cbd5e1 !important;
+    opacity: 1 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
